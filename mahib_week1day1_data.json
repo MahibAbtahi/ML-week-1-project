@@ -1,0 +1,33 @@
+{
+    "dataset_name": "Titanic",
+    "total_rows": 891,
+    "total_columns": 12,
+    "features": [
+        "PassengerId",
+        "Pclass",
+        "Name",
+        "Sex",
+        "Age",
+        "SibSp",
+        "Parch",
+        "Ticket",
+        "Fare",
+        "Cabin",
+        "Embarked"
+    ],
+    "target": "Survived",
+    "feature_data_types": {
+        "PassengerId": "int64",
+        "Survived": "int64",
+        "Pclass": "int64",
+        "Name": "str",
+        "Sex": "str",
+        "Age": "float64",
+        "SibSp": "int64",
+        "Parch": "int64",
+        "Ticket": "str",
+        "Fare": "float64",
+        "Cabin": "str",
+        "Embarked": "str"
+    }
+}
