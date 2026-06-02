@@ -1,0 +1,117 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, LabelEncoder
+import os
+
+print("=============================================")
+print("STARTING DAY 3: FEATURE ENGINEERING & CLEANING")
+print("=============================================\n")
+
+# --- STEP 1: SMART DATA LOADING ---
+filename = "Titanic-Dataset.csv"
+target_path = None
+
+for root, dirs, files in os.walk("."):
+    if filename in files:
+        target_path = os.path.join(root, filename)
+        break
+
+if target_path:
+    df = pd.read_csv(target_path)
+    print(f"Successfully loaded dataset from: {target_path}")
+else:
+    print(f"Error: Cannot find '{filename}' in your workspace.")
+    exit()
+
+
+# --- EXPERIMENTAL WORK STEP 1: DATA PREPROCESSING & CLEANING ---
+print("\n--- Step 1: Handling Missing Values ---")
+
+# 1. Fill missing 'Age' values with the median age (robust against outliers)
+median_age = df['Age'].median()
+df['Age'] = df['Age'].fillna(median_age)
+print(f"Imputed missing Age values with median: {median_age}")
+
+# 2. Fill missing 'Embarked' values with the most common port (mode)
+pushed_mode_embarked = df['Embarked'].mode()[0]
+df['Embarked'] = df['Embarked'].fillna(pushed_mode_embarked)
+print(f"Imputed missing Embarked values with mode: '{pushed_mode_embarked}'")
+
+# 3. Drop 'Cabin' because more than 77% of it is missing data
+if 'Cabin' in df.columns:
+    df = df.drop(columns=['Cabin'])
+    print("Dropped 'Cabin' column due to high missing percentage (>77%)")
+
+
+# --- EXPERIMENTAL WORK STEP 2: APPLYING TRANSFORMATIONS (SCALING) ---
+print("\n--- Step 2: Applying Feature Scaling ---")
+
+# 1. Standardization (Z-score Scaling) on 'Age' -> mean=0, std=1
+standard_scaler = StandardScaler()
+df['Age_scaled'] = standard_scaler.fit_transform(df[['Age']])
+print("Standardized 'Age' feature -> Created 'Age_scaled'")
+
+# 2. Normalization (Min-Max Scaling) on 'Fare' -> range [0, 1]
+min_max_scaler = MinMaxScaler()
+df['Fare_scaled'] = min_max_scaler.fit_transform(df[['Fare']])
+print("Normalized 'Fare' feature -> Created 'Fare_scaled'")
+
+
+# --- EXPERIMENTAL WORK STEP 3: CREATING NEW FEATURES (FEATURE ENGINEERING) ---
+print("\n--- Step 3: Feature Engineering (Creating New Metrics) ---")
+
+# 1. Family Size: Combining SibSp (siblings/spouses) and Parch (parents/children) + 1 (the passenger themselves)
+df['FamilySize'] = df['SibSp'] + df['Parch'] + 1
+print("Created 'FamilySize' feature (SibSp + Parch + 1)")
+
+# 2. IsAlone: Binary flag indicating if the passenger traveled without family
+df['IsAlone'] = np.where(df['FamilySize'] == 1, 1, 0)
+print("Created 'IsAlone' binary feature")
+
+
+# --- EXTRA: ENCODING CATEGORICAL COLUMNS ---
+print("\n--- Encoding Categorical Variables ---")
+
+# Convert string values ('male', 'female') into numerical binaries (0, 1)
+label_encoder_sex = LabelEncoder()
+df['Sex_encoded'] = label_encoder_sex.fit_transform(df['Sex'])
+print("Encoded 'Sex' column into numerical labels ('Sex_encoded')")
+
+# One-Hot Encode 'Embarked' since there are 3 distinct ports (C, Q, S)
+df = pd.get_dummies(df, columns=['Embarked'], prefix='Embarked', drop_first=True)
+print("Applied One-Hot Encoding to 'Embarked' ports")
+
+
+# --- EXPERIMENTAL WORK STEP 4: SAVE OUTPUT VIA STANDARD NAMING CONVENTION ---
+# Dropping raw text identifiers that machine learning models cannot interpret directly
+columns_to_drop = ['PassengerId', 'Name', 'Ticket', 'Sex', 'Age', 'Fare']
+final_df = df.drop(columns=[col for col in columns_to_drop if col in df.columns])
+
+json_output_path = "mahib_week1day3_features.json"
+
+# Save the metrics overview to a structured JSON profile
+summary_stats = {
+    "records_processed": int(len(final_df)),
+    "features_engineered": ["FamilySize", "IsAlone", "Age_scaled", "Fare_scaled", "Sex_encoded"],
+    "final_column_list": list(final_df.columns),
+    "sample_row": final_df.head(1).to_dict(orient='records')[0]
+}
+
+# Convert any non-native types so json.dump can safely parse them
+for key, val in summary_stats["sample_row"].items():
+    if isinstance(val, (np.integer, np.bool_)):
+        summary_stats["sample_row"][key] = int(val)
+    elif isinstance(val, np.floating):
+        summary_stats["sample_row"][key] = float(val)
+
+with open(json_output_path, 'w') as json_file:
+    import json
+    json.dump(summary_stats, json_file, indent=4)
+
+# Also save the cleaned training data matrix to a fresh CSV for next week's models
+csv_output_path = "mahib_week1day3_cleaned_data.csv"
+final_df.to_csv(csv_output_path, index=False)
+
+print(f"\n✅ Day 3 structured configuration summary saved to: '{json_output_path}'")
+print(f"✅ Day 3 machine-ready dataset saved to: '{csv_output_path}'")
+print("=============================================")

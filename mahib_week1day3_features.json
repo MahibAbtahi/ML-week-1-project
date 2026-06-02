@@ -1,0 +1,36 @@
+{
+    "records_processed": 891,
+    "features_engineered": [
+        "FamilySize",
+        "IsAlone",
+        "Age_scaled",
+        "Fare_scaled",
+        "Sex_encoded"
+    ],
+    "final_column_list": [
+        "Survived",
+        "Pclass",
+        "SibSp",
+        "Parch",
+        "Age_scaled",
+        "Fare_scaled",
+        "FamilySize",
+        "IsAlone",
+        "Sex_encoded",
+        "Embarked_Q",
+        "Embarked_S"
+    ],
+    "sample_row": {
+        "Survived": 0,
+        "Pclass": 3,
+        "SibSp": 1,
+        "Parch": 0,
+        "Age_scaled": -0.5657364610748746,
+        "Fare_scaled": 0.014151057562208049,
+        "FamilySize": 2,
+        "IsAlone": 0,
+        "Sex_encoded": 1,
+        "Embarked_Q": false,
+        "Embarked_S": true
+    }
+}
