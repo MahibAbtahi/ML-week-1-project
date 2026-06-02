@@ -1,0 +1,25 @@
+{
+    "target_variable": "Survived",
+    "class_counts": {
+        "0": 549,
+        "1": 342
+    },
+    "class_percentages": {
+        "0": 0.6161616161616161,
+        "1": 0.3838383838383838
+    },
+    "missing_values_percentage": {
+        "PassengerId": 0.0,
+        "Survived": 0.0,
+        "Pclass": 0.0,
+        "Name": 0.0,
+        "Sex": 0.0,
+        "Age": 19.87,
+        "SibSp": 0.0,
+        "Parch": 0.0,
+        "Ticket": 0.0,
+        "Fare": 0.0,
+        "Cabin": 77.1,
+        "Embarked": 0.22
+    }
+}
