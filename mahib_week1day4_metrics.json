@@ -1,0 +1,23 @@
+{
+    "Logistic_Regression_Baseline": {
+        "Accuracy": 0.8044692737430168,
+        "Hyperparameters": {
+            "C": "1.0"
+        }
+    },
+    "Decision_Tree": {
+        "Accuracy": 0.7653631284916201,
+        "Hyperparameters": {
+            "max_depth": "5",
+            "min_samples_split": "10"
+        }
+    },
+    "Random_Forest_Advanced": {
+        "Accuracy": 0.7988826815642458,
+        "Hyperparameters": {
+            "max_depth": "6",
+            "min_samples_split": "2",
+            "n_estimators": "100"
+        }
+    }
+}
