@@ -1,0 +1,27 @@
+{
+    "model_evaluated": "Random_Forest_Advanced",
+    "single_split_metrics": {
+        "accuracy": 0.7988826815642458,
+        "precision": 0.8235294117647058,
+        "recall": 0.6086956521739131,
+        "f1_score": 0.7
+    },
+    "confusion_matrix_counts": {
+        "true_negatives": 101,
+        "false_positives": 9,
+        "false_negatives": 27,
+        "true_positives": 42
+    },
+    "cross_validation": {
+        "fold_scores": [
+            0.7932960893854749,
+            0.8146067415730337,
+            0.8370786516853933,
+            0.797752808988764,
+            0.848314606741573
+        ],
+        "mean_accuracy": 0.8182097796748478,
+        "standard_deviation": 0.02151509442562122
+    },
+    "analytical_conclusion": "The cross-validation mean accuracy aligns closely with our test split, indicating stable behavior free from severe data leakage."
+}
